@@ -55,11 +55,6 @@ The protocol will use patient-level data splits and restrict each prediction to 
 - [ ] Evaluate predictions and explanations.
 - [ ] Build an interactive research prototype.
 
-## Data
-
-ADNI is a candidate dataset. Dataset selection and access have not yet been confirmed.
-
-Restricted medical data and patient records will not be included in this repository. Any future data use will follow the applicable access conditions.
 
 ## Intended Use
 
