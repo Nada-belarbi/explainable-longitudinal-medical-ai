@@ -1,0 +1,22 @@
+{
+  "authorized_use_confirmed": false,
+  "secret_path": "/absolute/private/path/new_subject_key.bin",
+  "inputs": {
+    "clinical_raw": {"path": "/absolute/private/path/investigator_ftldlbd_nacc74.csv", "sha256": "REQUIRED"},
+    "mri_raw": {"path": "/absolute/private/path/investigator_mri_nacc74.csv", "sha256": "REQUIRED"},
+    "cohort_config": {"path": "/absolute/project/path/configs/nacc_columns.json", "sha256": "REQUIRED"},
+    "mri_schema": {"path": "/absolute/project/path/configs/nacc74_mixed_protocol_mri.json", "sha256": "REQUIRED"}
+  },
+  "clinical_feature_columns": {
+    "age": "NACCAGE",
+    "sex": "NACCSEX",
+    "education": "EDUC",
+    "cdr_global": "CDRGLOB",
+    "cdr_sum_boxes": "CDRSUM",
+    "mmse": "NACCMMSE"
+  },
+  "training": {
+    "max_epochs": 100, "patience": 10, "batch_size": 32,
+    "learning_rate": 0.001, "weight_decay": 0.0001, "seed": 42, "device": "auto"
+  }
+}

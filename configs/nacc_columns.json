@@ -1,0 +1,43 @@
+{
+  "source_freeze": "NACC Freeze 74 (June 2026)",
+  "clinical": {
+    "participant_id": "NACCID",
+    "site_id": "NACCADC",
+    "visit_date": "VISITDATE",
+    "diagnosis": "NACCUDSD",
+    "alzheimers_etiology": "NACCALZD",
+    "features": ["NACCAGE", "NACCSEX", "EDUC", "CDRGLOB", "CDRSUM", "NACCMMSE"]
+  },
+  "mri": {
+    "participant_id": "NACCID",
+    "site_id": "NACCADC",
+    "year": "MRIYR",
+    "month": "MRIMO",
+    "day": "MRIDY",
+    "availability_column": "NACCMVOL"
+  },
+  "diagnosis_codes": {
+    "mci": 3,
+    "dementia": 4,
+    "alzheimers_etiology": 1
+  },
+  "feature_missing_codes": {
+    "NACCAGE": [],
+    "NACCSEX": [8, 9],
+    "EDUC": [99],
+    "CDRGLOB": [99],
+    "CDRSUM": [99],
+    "NACCMMSE": [88, 95, 96, 97, 98, -4]
+  },
+  "categorical_features": ["NACCSEX"],
+  "cohort": {
+    "max_mri_clinical_delta_days": 90,
+    "progression_window_days": 730,
+    "minimum_sequence_visits": 2,
+    "maximum_sequence_visits": 3,
+    "train_fraction": 0.70,
+    "validation_fraction": 0.15,
+    "test_fraction": 0.15,
+    "random_seed": 42
+  }
+}

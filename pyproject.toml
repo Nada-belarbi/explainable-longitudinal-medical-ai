@@ -9,20 +9,29 @@ description = "Longitudinal multimodal NACC progression modeling and evaluation.
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",
+    "pandas>=2.0",
+    "pyarrow>=18",
     "scikit-learn>=1.5",
     "torch>=2.4",
+    "matplotlib>=3.8",
+    "thrift>=0.20",
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
 
+[project.scripts]
+nacc-cohort = "nacc_progression.workstream1.cli:main"
+nacc-final = "nacc_progression.run_final:main"
+nacc-compare = "nacc_progression.run_comparisons:main"
+
 [tool.setuptools]
-package-dir = {"" = "ml"}
+package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
-where = ["ml"]
+where = ["src"]
 include = ["nacc_progression*"]
 
 [tool.pytest.ini_options]
-pythonpath = ["ml"]
+pythonpath = ["src"]
 testpaths = ["tests"]

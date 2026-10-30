@@ -1,5 +1,6 @@
 __pycache__/
 *.py[cod]
+.DS_Store
 .pytest_cache/
 .venv/
 *.egg-info/
@@ -10,3 +11,16 @@ data/restricted/**
 data/processed/**
 artifacts/checkpoints/**
 artifacts/preprocessors/**
+*.bin
+*.pkl
+*.parquet
+*.csv
+*.pt
+*.pth
+*private*key*
+restricted/
+/NACC-DATA/
+/configs/final.private.json
+/artifacts/private_runs/
+# End of ignore rules.
+

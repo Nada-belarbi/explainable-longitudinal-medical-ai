@@ -1,0 +1,86 @@
+NACC74 MIXED-PROTOCOL MRI PREFLIGHT
+===================================
+Status: PRIMARY_TRAINING_COMPLETE; SIX EXPLORATORY COMPARISONS COMPLETE.
+Updated: 2026-10-28
+
+This audit supersedes workstream2_clariti_legacy.txt. The approved experiment
+uses NACC Freeze 74 UDS clinical history and NACC Mixed-protocol quantitative
+MRI only. No CLARiTI or PET data were used in this preflight.
+
+Sources
+-------
+Clinical export: investigator_ftldlbd_nacc74.csv (UDS fields used by the
+approved cohort pipeline).
+MRI export: investigator_mri_nacc74.csv.
+MRI definitions and missing codes: NACC Mixed Protocol MRI Researcher's Data
+Dictionary (2026). Clinical definitions/codes: NACC UDSv4 Researcher's Data
+Dictionary (April 2026).
+
+Cohort and split audit
+----------------------
+Clinical source: 57,038 participants and 217,598 visits.
+MRI source: 12,180 rows and 8,038 participants.
+MRI-to-clinical matching: MRI on or before clinical visit, within 90 days;
+1,970 matched records across 1,611 participants; no future scans matched.
+Quantitative MRI participants: 755.
+Eligible anchor cohort: 75 participants (55 label 0, 20 label 1).
+Sequence lengths: 16 with two visits, 59 with three visits.
+One stratified patient-level split, seed 42:
+- Train: 52 participants (38 label 0, 14 label 1)
+- Validation: 11 participants (8 label 0, 3 label 1)
+- Test: 12 participants (9 label 0, 3 label 1)
+
+MRI preparation audit
+---------------------
+The MRI export contains 12,180 scan rows. The preflight found 519 rows that
+were exact duplicates by composite site/participant key and scan date, with
+identical availability and all 152 candidate measurements. These exact copies
+are collapsed in memory; conflicting same-date rows block the run.
+The RDD-reviewed candidate whitelist contains 152 variables. The 20% missing
+filter uses only 69 quantitative MRI visits in the training split as its
+denominator. 149 features are retained after missingness and non-constant
+checks. Only training MRI visits fit the imputer and scaler.
+Historical visits without MRI are preserved as clinical visits and represented
+by a normalized zero MRI vector plus an all-missing MRI mask. Every anchor has
+quantitative MRI. Train/validation/test histories are disjoint by participant.
+
+Primary model result
+--------------------
+The multimodal longitudinal GRU selected its checkpoint at epoch 2 (12 epochs
+were run with early stopping). On the 12-person test set (3 progressions),
+AUROC was 0.630, AUPRC 0.360, balanced accuracy 0.500, sensitivity 0.000,
+specificity 1.000, F1 0.000, and Brier score 0.233. It detected 0/3
+progressions at the validation-selected threshold. The 95% patient-bootstrap
+AUROC interval was approximately 0.30-0.91.
+
+Exploratory comparison results
+------------------------------
+These six arms used the same fixed patient split and validation-selected
+thresholds. Because the test set had already been inspected for the primary
+model, these comparisons are exploratory and must not be used to select a final
+model:
+
+Model                         AUROC  AUPRC  Balanced accuracy  Sensitivity
+Logistic clinical last visit  0.852  0.810  0.667              0.667
+Logistic MRI last visit       0.778  0.500  0.611              0.333
+Logistic multimodal last      0.852  0.810  0.722              0.667
+Clinical longitudinal GRU     0.926  0.867  0.778              1.000
+MRI longitudinal GRU          0.667  0.403  0.556              0.333
+Multimodal longitudinal GRU   0.630  0.360  0.500              0.000
+
+Artifacts are stored locally under the Git-ignored `artifacts/private_runs/`
+directory. The primary run is in `freeze74/primary_multimodal/`; comparison
+checkpoints and aggregate results are in
+`freeze74/exploratory_comparisons_2026-10-28/`.
+
+Limitations and remaining actions
+---------------------------------
+The sample is small: only 12 test participants, including 3 progressions.
+All test metrics and confidence intervals are highly uncertain and must not
+support clinical utility or calibration claims. The primary model has poor
+sensitivity (0/3 progressions detected). Since the test has been inspected, a
+confirmatory model comparison requires a new untouched independent test set.
+The training/checkpoint/metrics/learning-curve/XAI artifacts exist privately;
+no narrative report was generated.
+Do not use the test set for model selection. Do not commit any participant-level
+source/derived data, pseudonymization key, checkpoint, or preprocessing object.
